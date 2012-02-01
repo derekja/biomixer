@@ -7,6 +7,6 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 public interface RootPathServiceAsync {
 
     void findPathToRoot(String ontologyVersionId, String virtualOntologyId,
-            String conceptId, AsyncCallback<ResourcePath> callback);
+            String fullConceptId, AsyncCallback<ResourcePath> callback);
 
 }

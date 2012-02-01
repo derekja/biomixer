@@ -35,7 +35,6 @@ public class OntologyVersionServiceAsyncClientImplementation extends
             final AsyncCallback<String> callback) {
 
         String url = buildUrl(virtualOntologyId);
-
         fetchUrl(callback, url, new Transformer<String, String>() {
             @Override
             public String transform(String xmlText) throws Exception {
