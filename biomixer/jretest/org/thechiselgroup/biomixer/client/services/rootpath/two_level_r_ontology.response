@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<success>
+  <accessedResource>/bioportal/path/45903/</accessedResource>
+  <accessDate>2012-02-01 09:00:49.807 PST</accessDate>
+  <data>
+    <classBean>
+      <id>THING</id>
+      <fullId>THING</fullId>
+      <label>THING</label>
+      <type>class</type>
+      <relations>
+        <entry>
+          <string>SubClass</string>
+          <list>
+            <classBean>
+              <id>WSIO_data:data</id>
+              <fullId>http://purl.bioontology.org/ontology/WSIO/WSIO_data_data</fullId>
+              <label>Data</label>
+              <type>class</type>
+              <definitions>
+                <string>Data is an information artefact that is &apos;understandable&apos; by dedicated computational tools that can use the data as their input or output.</string>
+              </definitions>
+              <relations>
+                <entry>
+                  <string>ChildCount</string>
+                  <int>3</int>
+                </entry>
+              </relations>
+            </classBean>
+            <classBean>
+              <id>WSIO_transfer:transfer</id>
+              <fullId>http://purl.bioontology.org/ontology/WSIO/WSIO_transfer_transfer</fullId>
+              <label>Transfer</label>
+              <type>class</type>
+              <synonyms>
+                <string>Data transfer</string>
+                <string>Data transfer protocol</string>
+                <string>Data channel</string>
+                <string>Form of data transfer</string>
+                <string>Type of data transfer</string>
+              </synonyms>
+              <definitions>
+                <string>Transfer (type of data transfer, data transfer protocol) is the way data is transfered between 2 locations or processes.</string>
+              </definitions>
+              <relations>
+                <entry>
+                  <string>ChildCount</string>
+                  <int>3</int>
+                </entry>
+              </relations>
+            </classBean>
+            <classBean>
+              <id>WSIO_operation:operation</id>
+              <fullId>http://purl.bioontology.org/ontology/WSIO/WSIO_operation_operation</fullId>
+              <label>Operation</label>
+              <type>class</type>
+              <definitions>
+                <string>Operation is a function that processes a set of inputs and results in a set of outputs, or associates input arguments with output values.</string>
+              </definitions>
+              <relations>
+                <entry>
+                  <string>ChildCount</string>
+                  <int>6</int>
+                </entry>
+              </relations>
+            </classBean>
+            <classBean>
+              <id>WSIO_compression:compression</id>
+              <fullId>http://purl.bioontology.org/ontology/WSIO/WSIO_compression_compression</fullId>
+              <label>Compression and encoding</label>
+              <type>class</type>
+              <relations>
+                <entry>
+                  <string>SubClass</string>
+                  <list>
+                    <classBean>
+                      <id>WSIO_compression:16</id>
+                      <fullId>http://purl.bioontology.org/ontology/WSIO/WSIO_compression_16</fullId>
+                      <label>Combination of compression and encoding</label>
+                      <type>class</type>
+                      <relations>
+                        <entry>
+                          <string>ChildCount</string>
+                          <int>1</int>
+                        </entry>
+                      </relations>
+                    </classBean>
+                    <classBean>
+                      <id>WSIO_compression:15</id>
+                      <fullId>http://purl.bioontology.org/ontology/WSIO/WSIO_compression_15</fullId>
+                      <label>Binary-to-text encoding</label>
+                      <type>class</type>
+                      <relations>
+                        <entry>
+                          <string>ChildCount</string>
+                          <int>1</int>
+                        </entry>
+                      </relations>
+                    </classBean>
+                    <classBean>
+                      <id>WSIO_compression:14</id>
+                      <fullId>http://purl.bioontology.org/ontology/WSIO/WSIO_compression_14</fullId>
+                      <label>Data compression</label>
+                      <type>class</type>
+                      <relations>
+                        <entry>
+                          <string>ChildCount</string>
+                          <int>4</int>
+                        </entry>
+                      </relations>
+                    </classBean>
+                  </list>
+                </entry>
+                <entry>
+                  <string>ChildCount</string>
+                  <int>3</int>
+                </entry>
+                <entry>
+                  <string>[R]is_a</string>
+                  <list>
+                    <classBean>
+                      <id>WSIO_compression:16</id>
+                      <fullId>http://purl.bioontology.org/ontology/WSIO/WSIO_compression_16</fullId>
+                      <label>Combination of compression and encoding</label>
+                      <type>class</type>
+                      <relations>
+                        <entry>
+                          <string>ChildCount</string>
+                          <int>1</int>
+                        </entry>
+                      </relations>
+                    </classBean>
+                    <classBean>
+                      <id>WSIO_compression:15</id>
+                      <fullId>http://purl.bioontology.org/ontology/WSIO/WSIO_compression_15</fullId>
+                      <label>Binary-to-text encoding</label>
+                      <type>class</type>
+                      <relations>
+                        <entry>
+                          <string>ChildCount</string>
+                          <int>1</int>
+                        </entry>
+                      </relations>
+                    </classBean>
+                    <classBean>
+                      <id>WSIO_compression:14</id>
+                      <fullId>http://purl.bioontology.org/ontology/WSIO/WSIO_compression_14</fullId>
+                      <label>Data compression</label>
+                      <type>class</type>
+                      <relations>
+                        <entry>
+                          <string>ChildCount</string>
+                          <int>4</int>
+                        </entry>
+                      </relations>
+                    </classBean>
+                  </list>
+                </entry>
+              </relations>
+            </classBean>
+          </list>
+        </entry>
+        <entry>
+          <string>ChildCount</string>
+          <int>4</int>
+        </entry>
+      </relations>
+    </classBean>
+  </data>
+</success>

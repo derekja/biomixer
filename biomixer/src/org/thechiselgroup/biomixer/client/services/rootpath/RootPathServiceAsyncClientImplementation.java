@@ -33,15 +33,15 @@ public class RootPathServiceAsyncClientImplementation extends
 
     @Override
     public void findPathToRoot(final String virtualOntologyId,
-            final String ontologyVersionId, final String conceptId,
+            final String ontologyVersionId, final String fullConceptId,
             final AsyncCallback<ResourcePath> callback) {
 
-        String url = buildUrl(conceptId, ontologyVersionId);
+        String url = buildUrl(fullConceptId, ontologyVersionId);
         fetchUrl(callback, url, new Transformer<String, ResourcePath>() {
             @Override
             public ResourcePath transform(String xmlText) throws Exception {
                 return resultParser.parse(ontologyVersionId, virtualOntologyId,
-                        conceptId, xmlText);
+                        fullConceptId, xmlText);
             }
 
         });

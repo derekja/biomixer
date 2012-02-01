@@ -40,16 +40,16 @@ public class RootPathLoader implements EmbeddedViewLoader {
 
     private void doLoadData(final DefaultView view,
             final String virtualOntologyId, final String ontologyVersionId,
-            final String conceptId) {
+            final String fullConceptId) {
 
         rootPathService.findPathToRoot(virtualOntologyId, ontologyVersionId,
-                conceptId, new ErrorHandlingAsyncCallback<ResourcePath>(
+                fullConceptId, new ErrorHandlingAsyncCallback<ResourcePath>(
                         errorHandler) {
                     @Override
                     public void onFailure(Throwable caught) {
                         errorHandler.handleError(new Exception(
                                 "Could not retrieve path to root for "
-                                        + conceptId, caught));
+                                        + fullConceptId, caught));
                     }
 
                     @Override
@@ -81,16 +81,17 @@ public class RootPathLoader implements EmbeddedViewLoader {
 
     private void loadData(final DefaultView view,
             final String virtualOntologyId, final String ontologyVersionId,
-            final String conceptId) {
+            final String fullConceptId) {
 
         if (view.isReady()) {
-            doLoadData(view, virtualOntologyId, ontologyVersionId, conceptId);
+            doLoadData(view, virtualOntologyId, ontologyVersionId,
+                    fullConceptId);
         } else {
             new Timer() {
                 @Override
                 public void run() {
                     loadData(view, virtualOntologyId, ontologyVersionId,
-                            conceptId);
+                            fullConceptId);
                 }
             }.schedule(200);
         }
@@ -105,8 +106,8 @@ public class RootPathLoader implements EmbeddedViewLoader {
         graphView.init();
         callback.onSuccess(graphView);
 
-        final String conceptId = UriUtils.decodeURIComponent(windowLocation
-                .getParameter("concept_id"));
+        final String fullConceptId = UriUtils.decodeURIComponent(windowLocation
+                .getParameter("full_concept_id"));
         final String virtualOntologyId = windowLocation
                 .getParameter("virtual_ontology_id");
 
@@ -123,7 +124,7 @@ public class RootPathLoader implements EmbeddedViewLoader {
                     @Override
                     protected void runOnSuccess(String result) throws Exception {
                         loadData((DefaultView) graphView, virtualOntologyId,
-                                result, conceptId);
+                                result, fullConceptId);
                     }
 
                 });

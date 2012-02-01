@@ -18,13 +18,17 @@ import com.google.inject.Inject;
 
 public class RootPathParser extends AbstractXMLResultParser {
 
+    // TODO put this is one standard place for both this parser and
+    // FullTermResponseParser
+    private static final String REVERSE_PREFIX = "[R]";
+
     private Resource target;
 
     private String ontologyVersionId;
 
     private String virtualOntologyId;
 
-    private String conceptId;
+    private String fullConceptId;
 
     private List<Resource> resources;
 
@@ -43,14 +47,14 @@ public class RootPathParser extends AbstractXMLResultParser {
     }
 
     private void initializeState(String ontologyVersionId,
-            String virtualOntologyId, String conceptId) {
+            String virtualOntologyId, String fullConceptId) {
         // XXX don't know if these should really be fields. It avoids passing
         // them all as parameters to traverseLayer though.
         // TODO: put in constructor. Not sure how injection works yet so leaving
         // them here for the moment
         this.ontologyVersionId = ontologyVersionId;
         this.virtualOntologyId = virtualOntologyId;
-        this.conceptId = conceptId;
+        this.fullConceptId = fullConceptId;
         target = null;
         resources = new ArrayList<Resource>();
         processLater = new ArrayList<Object>();
@@ -58,10 +62,10 @@ public class RootPathParser extends AbstractXMLResultParser {
     }
 
     public ResourcePath parse(String ontologyVersionId,
-            String virtualOntologyId, String conceptId, String xmlText)
+            String virtualOntologyId, String fullConceptId, String xmlText)
             throws Exception {
 
-        initializeState(ontologyVersionId, virtualOntologyId, conceptId);
+        initializeState(ontologyVersionId, virtualOntologyId, fullConceptId);
 
         Object rootNode = parseDocument(xmlText);
 
@@ -170,9 +174,9 @@ public class RootPathParser extends AbstractXMLResultParser {
 
                 // TODO: find out what 'OMV:' prefix means, find better way of
                 // handling
-                if (!resource.getValue(Concept.SHORT_ID).equals(conceptId)
+                if (!resource.getValue(Concept.FULL_ID).equals(fullConceptId)
                         && !resource.getValue(Concept.SHORT_ID).equals(
-                                "OMV:" + conceptId)) {
+                                "OMV:" + fullConceptId)) {
                     resources.add(resource);
                     subclassOrSuperclassConceptIds.add(Concept
                             .getFullId(resource));
