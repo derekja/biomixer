@@ -20,6 +20,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import org.thechiselgroup.biomixer.client.Concept;
+
 // TODO introduce resource ID's
 // TODO equality / hash based on ID
 public class Resource implements Serializable {
@@ -127,6 +129,28 @@ public class Resource implements Serializable {
     @Override
     public String toString() {
         return "Resource [uri=" + uri + ";properties=" + properties + "]";
+    }
+
+    public void updateChildren(String uri) {
+        UriList newChild = new UriList(uri);
+        updateChildren(newChild);
+    }
+
+    public void updateChildren(UriList additionalChildren) {
+        UriList currentChildren = getUriListValue(Concept.CHILD_CONCEPTS);
+        currentChildren.addAll(additionalChildren);
+        putValue(Concept.CHILD_CONCEPTS, currentChildren);
+    }
+
+    public void updateParents(String uri) {
+        UriList newParent = new UriList(uri);
+        updateParents(newParent);
+    }
+
+    public void updateParents(UriList additionalParents) {
+        UriList currentParents = getUriListValue(Concept.PARENT_CONCEPTS);
+        currentParents.addAll(additionalParents);
+        putValue(Concept.PARENT_CONCEPTS, currentParents);
     }
 
 }
