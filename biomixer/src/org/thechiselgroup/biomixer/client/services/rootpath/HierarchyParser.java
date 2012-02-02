@@ -8,10 +8,13 @@ import org.thechiselgroup.biomixer.client.core.resources.Resource;
 import org.thechiselgroup.biomixer.client.services.AbstractXMLResultParser;
 import org.thechiselgroup.biomixer.shared.workbench.util.xml.DocumentProcessor;
 
+import com.google.inject.Inject;
+
 public class HierarchyParser extends AbstractXMLResultParser {
 
     private static final String DELIMITER = "\\.";
 
+    @Inject
     public HierarchyParser(DocumentProcessor documentProcessor) {
         super(documentProcessor);
     }
@@ -34,6 +37,7 @@ public class HierarchyParser extends AbstractXMLResultParser {
         Resource targetResource = new Resource(Concept.toConceptURI(
                 virtualOntologyId, targetShortConceptId));
         targetResource.putValue(Concept.SHORT_ID, targetShortConceptId);
+        targetResource.putValue(Concept.VIRTUAL_ONTOLOGY_ID, virtualOntologyId);
         resourcesOnPaths.add(targetResource);
 
         Object rootNode = parseDocument(xmlText);
@@ -59,6 +63,8 @@ public class HierarchyParser extends AbstractXMLResultParser {
                     concept = new Resource(Concept.toConceptURI(
                             virtualOntologyId, shortId));
                     concept.putValue(Concept.SHORT_ID, shortId);
+                    concept.putValue(Concept.VIRTUAL_ONTOLOGY_ID,
+                            virtualOntologyId);
                     resourcesOnPaths.add(concept);
                 } else {
                     concept = alreadyFound;
