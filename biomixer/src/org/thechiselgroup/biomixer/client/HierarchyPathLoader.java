@@ -133,10 +133,6 @@ public class HierarchyPathLoader implements EmbeddedViewLoader {
                         resource.putValue(Concept.LABEL, label);
                         resource.putValue(Concept.TYPE, type);
 
-                        // TODO must be a better way than having to reset the
-                        // uri
-                        resource.resetUri(Concept.toConceptURI(
-                                virtualOntologyId, fullId));
                         resourceSet.add(resource);
                     }
                 });
