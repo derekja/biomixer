@@ -55,6 +55,14 @@ public class UriList implements Serializable, Iterable<String> {
         }
     }
 
+    public void addAllNew(UriList other) {
+        for (String uri : other) {
+            if (!contains(uri)) {
+                add(uri);
+            }
+        }
+    }
+
     public boolean contains(String uri) {
         assert uri != null;
         return delegate.contains(uri);
