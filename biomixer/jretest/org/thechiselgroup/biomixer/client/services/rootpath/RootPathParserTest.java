@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.util.List;
 
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.thechiselgroup.biomixer.client.Concept;
 import org.thechiselgroup.biomixer.client.core.resources.Resource;
@@ -174,6 +175,7 @@ public class RootPathParserTest {
                 equalTo(generateUri(concept1fullId)));
     }
 
+    @Ignore
     @Test
     public void parseFullROntologyWithMultipleParents() throws IOException,
             Exception {
@@ -195,8 +197,6 @@ public class RootPathParserTest {
             }
         }
 
-        System.out.println(path.getSurroundingResources().size());
-        // assertPathSize(path, 3);
     }
 
     @Test

@@ -138,7 +138,7 @@ public class Resource implements Serializable {
 
     public void updateChildren(UriList additionalChildren) {
         UriList currentChildren = getUriListValue(Concept.CHILD_CONCEPTS);
-        currentChildren.addAll(additionalChildren);
+        currentChildren.addAllNew(additionalChildren);
         putValue(Concept.CHILD_CONCEPTS, currentChildren);
     }
 
@@ -149,7 +149,7 @@ public class Resource implements Serializable {
 
     public void updateParents(UriList additionalParents) {
         UriList currentParents = getUriListValue(Concept.PARENT_CONCEPTS);
-        currentParents.addAll(additionalParents);
+        currentParents.addAllNew(additionalParents);
         putValue(Concept.PARENT_CONCEPTS, currentParents);
     }
 
