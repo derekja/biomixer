@@ -1,3 +1,18 @@
+/*******************************************************************************
+ * Copyright 2012 David Rusk 
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License"); 
+ * you may not use this file except in compliance with the License. 
+ * You may obtain a copy of the License at 
+ *
+ *    http://www.apache.org/licenses/LICENSE-2.0 
+ *     
+ * Unless required by applicable law or agreed to in writing, software 
+ * distributed under the License is distributed on an "AS IS" BASIS, 
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. 
+ * See the License for the specific language governing permissions and 
+ * limitations under the License.  
+ *******************************************************************************/
 package org.thechiselgroup.biomixer.client.visualization_component.graph.layouts;
 
 import static org.hamcrest.CoreMatchers.equalTo;
@@ -184,6 +199,46 @@ public class TreeFactoryTest {
             }
         }
         return false;
+    }
+
+    @SuppressWarnings("unchecked")
+    @Test
+    public void twoParents() {
+        StubGraphStructure stubGraph = new StubGraphStructure(5);
+        stubGraph.createArc(0, 1);
+        stubGraph.createArc(1, 2);
+        stubGraph.createArc(2, 4);
+        stubGraph.createArc(0, 3);
+        stubGraph.createArc(3, 4);
+
+        List<Tree> trees = underTest.getTrees(stubGraph.getNodeItems(),
+                stubGraph.getArcItems());
+        assertThat(trees.size(), equalTo(1));
+        Tree tree = trees.get(0);
+        assertThat(
+                tree.getRoot(),
+                equalsTree(0, 4,
+                        equalsTree(1, 2, equalsTree(2, 1, equalsTree(4, 0))),
+                        equalsTree(3, 1, equalsTree(4, 0))));
+    }
+
+    @Test
+    public void twoParentsDifferentLengthPathsDepthTest() {
+        StubGraphStructure stubGraph = new StubGraphStructure(5);
+        stubGraph.createArc(0, 1);
+        stubGraph.createArc(1, 2);
+        stubGraph.createArc(2, 4);
+        stubGraph.createArc(0, 3);
+        stubGraph.createArc(3, 4);
+
+        List<Tree> trees = underTest.getTrees(stubGraph.getNodeItems(),
+                stubGraph.getArcItems());
+        assertThat(trees.size(), equalTo(1));
+        Tree tree = trees.get(0);
+        assertThat(tree.getNodesAtDepth(0).size(), equalTo(1));
+        assertThat(tree.getNodesAtDepth(1).size(), equalTo(2));
+        assertThat(tree.getNodesAtDepth(2).size(), equalTo(1));
+        assertThat(tree.getNodesAtDepth(3).size(), equalTo(1));
     }
 
     @Test

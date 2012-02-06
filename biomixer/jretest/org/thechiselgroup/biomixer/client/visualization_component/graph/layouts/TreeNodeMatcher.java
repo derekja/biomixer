@@ -56,10 +56,22 @@ public class TreeNodeMatcher extends TypeSafeMatcher<TreeNode> {
 
     @Override
     public void describeTo(Description description) {
-        description.appendValue(nodeIndex);
-        for (Matcher<TreeNode> matcher : treeNodeMatchers) {
-            matcher.describeTo(description);
+        String childrenIds = "[";
+        for (int i = 0; i < treeNodeMatchers.length; i++) {
+            TreeNodeMatcher matcher = (TreeNodeMatcher) treeNodeMatchers[i];
+            if (i != 0) {
+                childrenIds += ", ";
+            }
+            childrenIds += matcher.getNodeIndex();
         }
+        childrenIds += "]";
+        description.appendText("Node Id: " + nodeIndex
+                + ", Number of descendants: " + numberOfDescendants
+                + ", Children Ids: " + childrenIds);
+    }
+
+    public int getNodeIndex() {
+        return nodeIndex;
     }
 
     @Override
