@@ -93,4 +93,16 @@ public class VerticalTreeLayoutTest {
         assertThat(callback.getLocation(stubGraph.getNodeItem(1)),
                 equalTo(new Point(50, 66)));
     }
+
+    @Test
+    public void twoPathsSameTree() {
+        StubGraphStructure stubGraph = new StubGraphStructure(5);
+        stubGraph.createArc(0, 1);
+        stubGraph.createArc(1, 2);
+        stubGraph.createArc(2, 4);
+        stubGraph.createArc(0, 3);
+        stubGraph.createArc(3, 4);
+        run(stubGraph);
+        // assertThat(callback.getLocation(stubGraph.getNodeItem(0)))
+    }
 }

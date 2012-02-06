@@ -40,8 +40,6 @@ import org.thechiselgroup.biomixer.client.services.rootpath.RootPathServiceAsync
 import org.thechiselgroup.biomixer.client.services.rootpath.RootPathServiceAsyncClientImplementation;
 import org.thechiselgroup.biomixer.client.services.rootpath.TermParentServiceAsync;
 import org.thechiselgroup.biomixer.client.services.rootpath.TermParentServiceAsyncClientImplementation;
-import org.thechiselgroup.biomixer.client.services.rootpath.TermRootPathServiceAsync;
-import org.thechiselgroup.biomixer.client.services.rootpath.TermRootPathServiceAsyncClientImplementation;
 import org.thechiselgroup.biomixer.client.services.search.ConceptSearchServiceAsync;
 import org.thechiselgroup.biomixer.client.services.search.ConceptSearchServiceAsyncClientImplementation;
 import org.thechiselgroup.biomixer.client.services.term.ConceptNeighbourhoodServiceAsync;
@@ -102,10 +100,6 @@ public class BioMixerClientModule extends ChooselWorkbenchClientModule {
 
         bind(TermParentServiceAsync.class).to(
                 TermParentServiceAsyncClientImplementation.class).in(
-                Singleton.class);
-
-        bind(TermRootPathServiceAsync.class).to(
-                TermRootPathServiceAsyncClientImplementation.class).in(
                 Singleton.class);
 
         bind(OntologyVersionServiceAsync.class).to(
