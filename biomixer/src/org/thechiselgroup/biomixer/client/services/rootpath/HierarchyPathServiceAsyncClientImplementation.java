@@ -38,7 +38,6 @@ public class HierarchyPathServiceAsyncClientImplementation extends
             final String conceptId, AsyncCallback<List<Resource>> callback) {
 
         String url = buildUrl(conceptId, virtualOntologyId);
-        System.out.println(url);
         fetchUrl(callback, url, new Transformer<String, List<Resource>>() {
             @Override
             public List<Resource> transform(String xmlText) throws Exception {
