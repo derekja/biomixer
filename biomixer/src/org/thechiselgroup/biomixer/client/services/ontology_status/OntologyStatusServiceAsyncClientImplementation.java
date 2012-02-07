@@ -43,10 +43,9 @@ public class OntologyStatusServiceAsyncClientImplementation extends
     }
 
     private String buildUrl() {
-        UrlBuilder urlBuilder = urlBuilderFactory.createUrlBuilder();
-        String path = "/obs/ontologies";
-        urlBuilder.setPath(path);
-        return urlBuilder.buildString();
+        UrlBuilder urlBuilder = urlBuilderFactory.createUrlBuilder().path(
+                "/obs/ontologies");
+        return urlBuilder.toString();
     }
 
     @Override

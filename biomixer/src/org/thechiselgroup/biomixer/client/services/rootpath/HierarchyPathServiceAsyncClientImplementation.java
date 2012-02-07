@@ -18,7 +18,6 @@ package org.thechiselgroup.biomixer.client.services.rootpath;
 import java.util.List;
 
 import org.thechiselgroup.biomixer.client.core.resources.Resource;
-import org.thechiselgroup.biomixer.client.core.util.UriUtils;
 import org.thechiselgroup.biomixer.client.core.util.transform.Transformer;
 import org.thechiselgroup.biomixer.client.core.util.url.UrlBuilder;
 import org.thechiselgroup.biomixer.client.core.util.url.UrlBuilderFactory;
@@ -43,10 +42,10 @@ public class HierarchyPathServiceAsyncClientImplementation extends
     }
 
     private String buildUrl(String conceptId, String virtualOntologyId) {
-        UrlBuilder urlBuilder = urlBuilderFactory.createUrlBuilder();
-        urlBuilder.setPath("/bioportal/virtual/rootpath/" + virtualOntologyId
-                + "/" + UriUtils.encodeURIComponent(conceptId));
-        return urlBuilder.buildString();
+        UrlBuilder urlBuilder = urlBuilderFactory.createUrlBuilder().path(
+                "/bioportal/virtual/rootpath/" + virtualOntologyId + "/"
+                        + conceptId);
+        return urlBuilder.toString();
     }
 
     @Override
