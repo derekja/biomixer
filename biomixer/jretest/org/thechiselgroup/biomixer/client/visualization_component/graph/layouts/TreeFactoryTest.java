@@ -41,8 +41,7 @@ public class TreeFactoryTest {
         stubGraph.createArc(1, 4);
         stubGraph.createArc(1, 5);
 
-        List<Tree> trees = underTest.getTrees(stubGraph.getNodeItems(),
-                stubGraph.getArcItems());
+        List<Tree> trees = getTrees(stubGraph);
         assertThat(trees.size(), equalTo(1));
 
         Tree tree = trees.get(0);
@@ -101,8 +100,7 @@ public class TreeFactoryTest {
         StubGraphStructure stubGraph = new StubGraphStructure(2);
         stubGraph.createArc(0, 1);
 
-        List<Tree> trees = underTest.getTrees(stubGraph.getNodeItems(),
-                stubGraph.getArcItems());
+        List<Tree> trees = getTrees(stubGraph);
         assertThat(trees.size(), equalTo(1));
 
         Tree tree = trees.get(0);
@@ -117,8 +115,7 @@ public class TreeFactoryTest {
         stubGraph.createArc(0, 1);
         stubGraph.createArc(1, 2);
 
-        List<Tree> trees = underTest.getTrees(stubGraph.getNodeItems(),
-                stubGraph.getArcItems());
+        List<Tree> trees = getTrees(stubGraph);
         assertThat(trees.size(), equalTo(1));
 
         Tree tree = trees.get(0);
@@ -135,8 +132,7 @@ public class TreeFactoryTest {
         stubGraph.createArc(0, 2);
         stubGraph.createArc(0, 3);
 
-        List<Tree> trees = underTest.getTrees(stubGraph.getNodeItems(),
-                stubGraph.getArcItems());
+        List<Tree> trees = getTrees(stubGraph);
         assertThat(trees.size(), equalTo(1));
 
         Tree tree = trees.get(0);
@@ -157,8 +153,7 @@ public class TreeFactoryTest {
         stubGraph.createArc(1, 4);
         stubGraph.createArc(1, 5);
 
-        List<Tree> trees = underTest.getTrees(stubGraph.getNodeItems(),
-                stubGraph.getArcItems());
+        List<Tree> trees = getTrees(stubGraph);
         assertThat(trees.size(), equalTo(1));
 
         Tree tree = trees.get(0);
@@ -182,8 +177,7 @@ public class TreeFactoryTest {
     public void singleNode() {
         StubGraphStructure stubGraph = new StubGraphStructure(1);
 
-        List<Tree> trees = underTest.getTrees(stubGraph.getNodeItems(),
-                stubGraph.getArcItems());
+        List<Tree> trees = getTrees(stubGraph);
 
         assertThat(trees.size(), equalTo(1));
         Tree tree = trees.get(0);
@@ -211,8 +205,7 @@ public class TreeFactoryTest {
         stubGraph.createArc(0, 3);
         stubGraph.createArc(3, 4);
 
-        List<Tree> trees = underTest.getTrees(stubGraph.getNodeItems(),
-                stubGraph.getArcItems());
+        List<Tree> trees = getTrees(stubGraph);
         assertThat(trees.size(), equalTo(1));
         Tree tree = trees.get(0);
         assertThat(
@@ -231,8 +224,7 @@ public class TreeFactoryTest {
         stubGraph.createArc(0, 3);
         stubGraph.createArc(3, 4);
 
-        List<Tree> trees = underTest.getTrees(stubGraph.getNodeItems(),
-                stubGraph.getArcItems());
+        List<Tree> trees = getTrees(stubGraph);
         assertThat(trees.size(), equalTo(1));
         Tree tree = trees.get(0);
         assertThat(tree.getNodesAtDepth(0).size(), equalTo(1));
@@ -241,12 +233,16 @@ public class TreeFactoryTest {
         assertThat(tree.getNodesAtDepth(3).size(), equalTo(1));
     }
 
+    private List<Tree> getTrees(StubGraphStructure stubGraph) {
+        return underTest.getTrees(stubGraph.getNodeItems(),
+                stubGraph.getArcItems());
+    }
+
     @Test
     public void twoRootsNoChildren() {
         StubGraphStructure stubGraph = new StubGraphStructure(2);
 
-        List<Tree> trees = underTest.getTrees(stubGraph.getNodeItems(),
-                stubGraph.getArcItems());
+        List<Tree> trees = getTrees(stubGraph);
         assertThat(trees.size(), equalTo(2));
         assertThat(trees.get(0).size(), equalTo(1));
         assertThat(trees.get(1).size(), equalTo(1));
@@ -260,8 +256,7 @@ public class TreeFactoryTest {
         stubGraph.createArc(0, 3);
         stubGraph.createArc(1, 4);
 
-        List<Tree> trees = underTest.getTrees(stubGraph.getNodeItems(),
-                stubGraph.getArcItems());
+        List<Tree> trees = getTrees(stubGraph);
         assertThat(trees.size(), equalTo(2));
 
         Tree tree1 = getTreeWithRootNodeItem(trees, stubGraph.getNodeItem(0));
