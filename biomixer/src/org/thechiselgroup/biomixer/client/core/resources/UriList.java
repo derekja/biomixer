@@ -81,6 +81,11 @@ public class UriList implements Serializable, Iterable<String> {
         return delegate.iterator();
     }
 
+    public void replace(String oldUri, String newUri) {
+        delegate.remove(oldUri);
+        delegate.add(newUri);
+    }
+
     public void setLoaded(boolean isLoaded) {
         this.isLoaded = isLoaded;
     }

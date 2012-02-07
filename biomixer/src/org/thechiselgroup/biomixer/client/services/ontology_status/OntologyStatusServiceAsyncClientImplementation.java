@@ -1,3 +1,18 @@
+/*******************************************************************************
+ * Copyright 2012 David Rusk 
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License"); 
+ * you may not use this file except in compliance with the License. 
+ * You may obtain a copy of the License at 
+ *
+ *    http://www.apache.org/licenses/LICENSE-2.0 
+ *     
+ * Unless required by applicable law or agreed to in writing, software 
+ * distributed under the License is distributed on an "AS IS" BASIS, 
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. 
+ * See the License for the specific language governing permissions and 
+ * limitations under the License.  
+ *******************************************************************************/
 package org.thechiselgroup.biomixer.client.services.ontology_status;
 
 import java.util.List;
@@ -14,6 +29,8 @@ import com.google.inject.Inject;
 
 public class OntologyStatusServiceAsyncClientImplementation extends
         AbstractXMLWebResourceService implements OntologyStatusServiceAsync {
+
+    public static final String AVAILABLE_STATUS = "28";
 
     private OntologyStatusParser parser;
 
@@ -33,20 +50,19 @@ public class OntologyStatusServiceAsyncClientImplementation extends
     }
 
     @Override
-    public void getOntologyStatuses(
-            AsyncCallback<Map<String, List<String>>> callback) {
+    public void getAvailableOntologies(AsyncCallback<List<String>> callback) {
 
         String url = buildUrl();
-        fetchUrl(callback, url,
-                new Transformer<String, Map<String, List<String>>>() {
+        fetchUrl(callback, url, new Transformer<String, List<String>>() {
 
-                    @Override
-                    public Map<String, List<String>> transform(String xmlText)
-                            throws Exception {
-                        return parser.parseStatuses(xmlText);
-                    }
+            @Override
+            public List<String> transform(String xmlText) throws Exception {
+                Map<String, List<String>> virtualOntologyIdsByStatus = parser
+                        .parseStatuses(xmlText);
+                return virtualOntologyIdsByStatus.get(AVAILABLE_STATUS);
+            }
 
-                });
+        });
 
     }
 
