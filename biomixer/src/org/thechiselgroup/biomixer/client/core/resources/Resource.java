@@ -126,6 +126,15 @@ public class Resource implements Serializable {
         putValue(key, uriList);
     }
 
+    // XXX this is needed because the hierarchy service which only returns short
+    // ids. After the full id has been separately looked up, need it to be used
+    // in the URI to be consistent with other services.
+    public void regenerateUri() {
+        this.uri = Concept.toConceptURI(
+                (String) getValue(Concept.VIRTUAL_ONTOLOGY_ID),
+                (String) getValue(Concept.FULL_ID));
+    }
+
     @Override
     public String toString() {
         return "Resource [uri=" + uri + ";properties=" + properties + "]";
