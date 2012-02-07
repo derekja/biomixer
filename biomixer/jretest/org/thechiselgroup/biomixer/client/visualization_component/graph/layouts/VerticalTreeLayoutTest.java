@@ -8,6 +8,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
@@ -94,6 +95,7 @@ public class VerticalTreeLayoutTest {
                 equalTo(new Point(50, 66)));
     }
 
+    @Ignore("TODO: test tree with two paths")
     @Test
     public void twoPathsSameTree() {
         StubGraphStructure stubGraph = new StubGraphStructure(5);
