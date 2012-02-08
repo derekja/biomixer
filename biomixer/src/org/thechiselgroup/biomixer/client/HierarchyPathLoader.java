@@ -129,6 +129,8 @@ public class HierarchyPathLoader implements EmbeddedViewLoader {
                             for (final Resource resource : resourceSet) {
                                 final String currentConceptFullId = (String) resource
                                         .getValue(Concept.FULL_ID);
+                                // TODO why do we need to get the concept
+                                // neighbourhood?
                                 conceptNeighbourhoodService
                                         .getNeighbourhood(
                                                 virtualOntologyId,
@@ -176,11 +178,24 @@ public class HierarchyPathLoader implements EmbeddedViewLoader {
                     protected void runOnSuccess(
                             List<Resource> hierarchyResources) throws Exception {
 
+                        // TODO use inject resource set factory
                         ResourceSet resourceSet = new DefaultResourceSet();
                         for (Resource resource : hierarchyResources) {
                             getBasicInformationForResourceAndAddToResourceSet(
                                     resource, virtualOntologyId, resourceSet);
                         }
+                        // TODO a better alternative might be to pass
+                        // the hierarchyResources.size into
+                        // getBasicInformation...
+                        // and check at the end of the method if all information
+                        // has been retrieved (and to do the next thing if so).
+                        // This would eliminate the
+                        // wait with the timer. Also, the neighbourhood
+                        // for a resource can immediately be retrieved after
+                        // the basic info has been loaded (and is loading
+                        // the basic info necessary? the info might be part of
+                        // the response
+                        // for the neighbourhood).
                         addResourcesToView(view, resourceSet,
                                 hierarchyResources.size());
                     }
@@ -278,6 +293,7 @@ public class HierarchyPathLoader implements EmbeddedViewLoader {
                             resource.updateChildren(previous.getUri());
                         }
 
+                        // TODO inject resource model & use directly
                         // if resource has already been found, merge them
                         Resource resourceWithSameUri = view.getResourceModel()
                                 .getResources().getByUri(resource.getUri());
@@ -285,6 +301,7 @@ public class HierarchyPathLoader implements EmbeddedViewLoader {
                             resourceWithSameUri.updateChildren(resource
                                     .getUriListValue(Concept.CHILD_CONCEPTS));
                         } else {
+                            // TODO use automatic resource set
                             ResourceSet resourceSet = new DefaultResourceSet();
                             resourceSet.add(resource);
                             view.getResourceModel().addResourceSet(resourceSet);
