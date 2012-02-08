@@ -47,11 +47,14 @@ public class HierarchyParser extends AbstractXMLResultParser {
             String pathIds = getText(entries[0], "text()");
             String[] shortIds = pathIds.split(DELIMITER);
 
+            // TODO remove - unnecessary, loop is skipped anyways when length=0
             if (shortIds.length == 0) {
                 continue;
             }
 
             for (String shortId : shortIds) {
+                // TODO if order does not matter, use set instead of contains
+                // check
                 if (!shortIdsOnPaths.contains(shortId)) {
                     shortIdsOnPaths.add(shortId);
                 }
