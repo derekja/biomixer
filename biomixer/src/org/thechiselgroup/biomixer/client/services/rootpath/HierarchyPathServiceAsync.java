@@ -15,13 +15,13 @@
  *******************************************************************************/
 package org.thechiselgroup.biomixer.client.services.rootpath;
 
-import java.util.List;
+import java.util.Set;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 public interface HierarchyPathServiceAsync {
 
     void findHierarchyToRoot(String virtualOntologyId, String conceptId,
-            AsyncCallback<List<String>> callback);
+            AsyncCallback<Set<String>> callback);
 
 }

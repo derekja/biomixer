@@ -20,7 +20,7 @@ import static org.junit.Assert.assertThat;
 import static org.thechiselgroup.biomixer.shared.core.test.matchers.collections.CollectionMatchers.containsExactly;
 
 import java.util.Arrays;
-import java.util.List;
+import java.util.Set;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -31,7 +31,7 @@ public class HierarchyParserTest {
 
     private HierarchyParser underTest;
 
-    private List<String> getResourcePath(String conceptShortId,
+    private Set<String> getResourcePath(String conceptShortId,
             String xmlFilename, String virtualOntologyId) throws Exception {
         String responseXml = IOUtils.readIntoString(HierarchyParserTest.class
                 .getResourceAsStream(xmlFilename));
@@ -42,7 +42,7 @@ public class HierarchyParserTest {
     @Test
     public void parseSingleHierarchyLengthFour() throws Exception {
         String virtualOntologyId = "1487";
-        List<String> pathShortIds = getResourcePath("SympatheticNervousSystem",
+        Set<String> pathShortIds = getResourcePath("SympatheticNervousSystem",
                 "single_hierarchy_length_four.response", virtualOntologyId);
 
         assertThat(pathShortIds.size(), equalTo(4));
@@ -54,7 +54,7 @@ public class HierarchyParserTest {
     @Test
     public void parseTwoHierarchies() throws Exception {
         String virtualOntologyId = "1070";
-        List<String> pathShortIds = getResourcePath("GO:0007569",
+        Set<String> pathShortIds = getResourcePath("GO:0007569",
                 "two_hierarchies.response", virtualOntologyId);
 
         assertThat(pathShortIds.size(), equalTo(5));

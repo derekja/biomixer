@@ -16,6 +16,7 @@
 package org.thechiselgroup.biomixer.client;
 
 import java.util.List;
+import java.util.Set;
 
 import org.thechiselgroup.biomixer.client.core.error_handling.ErrorHandler;
 import org.thechiselgroup.biomixer.client.core.error_handling.ErrorHandlingAsyncCallback;
@@ -103,7 +104,7 @@ public class HierarchyPathLoader implements EmbeddedViewLoader {
             final String virtualOntologyId, final String conceptId) {
 
         hierarchyPathService.findHierarchyToRoot(virtualOntologyId, conceptId,
-                new ErrorHandlingAsyncCallback<List<String>>(errorHandler) {
+                new ErrorHandlingAsyncCallback<Set<String>>(errorHandler) {
 
                     @Override
                     public void onFailure(Throwable caught) {
@@ -113,7 +114,7 @@ public class HierarchyPathLoader implements EmbeddedViewLoader {
                     }
 
                     @Override
-                    protected void runOnSuccess(List<String> shortIdsInHierarchy)
+                    protected void runOnSuccess(Set<String> shortIdsInHierarchy)
                             throws Exception {
 
                         // TODO use inject resource set factory
