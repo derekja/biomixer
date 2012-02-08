@@ -140,23 +140,23 @@ public class Resource implements Serializable {
         return "Resource [uri=" + uri + ";properties=" + properties + "]";
     }
 
-    public void updateChildren(String uri) {
+    public void addChild(String uri) {
         UriList newChild = new UriList(uri);
-        updateChildren(newChild);
+        addChildren(newChild);
     }
 
-    public void updateChildren(UriList additionalChildren) {
+    public void addChildren(UriList additionalChildren) {
         UriList currentChildren = getUriListValue(Concept.CHILD_CONCEPTS);
         currentChildren.addAllNew(additionalChildren);
         putValue(Concept.CHILD_CONCEPTS, currentChildren);
     }
 
-    public void updateParents(String uri) {
+    public void addParent(String uri) {
         UriList newParent = new UriList(uri);
-        updateParents(newParent);
+        addParents(newParent);
     }
 
-    public void updateParents(UriList additionalParents) {
+    public void addParents(UriList additionalParents) {
         UriList currentParents = getUriListValue(Concept.PARENT_CONCEPTS);
         currentParents.addAllNew(additionalParents);
         putValue(Concept.PARENT_CONCEPTS, currentParents);

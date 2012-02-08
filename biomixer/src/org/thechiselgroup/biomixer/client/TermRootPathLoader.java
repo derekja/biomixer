@@ -106,14 +106,14 @@ public class TermRootPathLoader implements EmbeddedViewLoader {
                             throws Exception {
 
                         if (previous != null) {
-                            resource.updateChildren(previous.getUri());
+                            resource.addChild(previous.getUri());
                         }
 
                         // if resource has already been found, merge them
                         Resource resourceWithSameUri = view.getResourceModel()
                                 .getResources().getByUri(resource.getUri());
                         if (resourceWithSameUri != null) {
-                            resourceWithSameUri.updateChildren(resource
+                            resourceWithSameUri.addChildren(resource
                                     .getUriListValue(Concept.CHILD_CONCEPTS));
                         } else {
                             ResourceSet resourceSet = new DefaultResourceSet();
@@ -128,7 +128,7 @@ public class TermRootPathLoader implements EmbeddedViewLoader {
                         for (String parentUri : resource
                                 .getUriListValue(Concept.PARENT_CONCEPTS)) {
                             String parentFullConceptId = Concept
-                                    .extractFullConceptId(parentUri);
+                                    .getConceptId(parentUri);
                             loadTerm(virtualOntologyId, parentFullConceptId,
                                     resource, view);
                         }

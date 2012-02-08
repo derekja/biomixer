@@ -71,16 +71,16 @@ public class HierarchyParser extends AbstractXMLResultParser {
                 }
 
                 if (previousResource != null) {
-                    concept.updateParents(previousResource.getUri());
-                    previousResource.updateChildren(concept.getUri());
+                    concept.addParent(previousResource.getUri());
+                    previousResource.addChild(concept.getUri());
                 }
 
                 previousResource = concept;
             }
 
             // link last resource with the target
-            previousResource.updateChildren(targetResource.getUri());
-            targetResource.updateParents(previousResource.getUri());
+            previousResource.addChild(targetResource.getUri());
+            targetResource.addParent(previousResource.getUri());
         }
 
         return resourcesOnPaths;

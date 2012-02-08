@@ -32,14 +32,10 @@ public class Tree {
         initializeTreeMapping();
     }
 
-    private Set<TreeNode> getAllNodes() {
+    public Set<TreeNode> getAllNodes() {
         Set<TreeNode> allNodes = root.getDescendants();
         allNodes.add(root);
         return allNodes;
-    }
-
-    public int getDepth(TreeNode treeNode) {
-        return root.getDepth(treeNode);
     }
 
     public int getHeight() {

@@ -260,6 +260,7 @@ public class HierarchyPathLoader implements EmbeddedViewLoader {
             final String fullConceptId, final Resource previous,
             final DefaultView view) {
 
+        System.out.println("Starting recursive term service");
         termParentService.getNextResource(virtualOntologyId, fullConceptId,
                 new ErrorHandlingAsyncCallback<Resource>(errorHandler) {
 
@@ -275,14 +276,14 @@ public class HierarchyPathLoader implements EmbeddedViewLoader {
                             throws Exception {
 
                         if (previous != null) {
-                            resource.updateChildren(previous.getUri());
+                            resource.addChild(previous.getUri());
                         }
 
                         // if resource has already been found, merge them
                         Resource resourceWithSameUri = view.getResourceModel()
                                 .getResources().getByUri(resource.getUri());
                         if (resourceWithSameUri != null) {
-                            resourceWithSameUri.updateChildren(resource
+                            resourceWithSameUri.addChildren(resource
                                     .getUriListValue(Concept.CHILD_CONCEPTS));
                         } else {
                             ResourceSet resourceSet = new DefaultResourceSet();
@@ -297,7 +298,7 @@ public class HierarchyPathLoader implements EmbeddedViewLoader {
                         for (String parentUri : resource
                                 .getUriListValue(Concept.PARENT_CONCEPTS)) {
                             String parentFullConceptId = Concept
-                                    .extractFullConceptId(parentUri);
+                                    .getConceptId(parentUri);
                             loadTerm(virtualOntologyId, parentFullConceptId,
                                     resource, view);
                         }
@@ -326,6 +327,7 @@ public class HierarchyPathLoader implements EmbeddedViewLoader {
                     protected void runOnSuccess(Resource result)
                             throws Exception {
 
+                        System.out.println("Got short id");
                         String shortId = (String) result
                                 .getValue(Concept.SHORT_ID);
                         loadHierarchyData(graphView, virtualOntologyId, shortId);

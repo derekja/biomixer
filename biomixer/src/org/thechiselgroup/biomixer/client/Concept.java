@@ -73,12 +73,6 @@ public final class Concept {
         return concept;
     }
 
-    public static String extractFullConceptId(String uri) {
-        // XXX assumes URI form doesn't change
-        int fullIdStartIndex = uri.indexOf("/") + 1;
-        return uri.substring(fullIdStartIndex);
-    }
-
     public static String getConceptId(Resource resource) {
         return getConceptId(resource.getUri());
     }

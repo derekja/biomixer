@@ -19,7 +19,6 @@ import java.util.List;
 import java.util.Map;
 
 import org.thechiselgroup.biomixer.client.core.util.transform.Transformer;
-import org.thechiselgroup.biomixer.client.core.util.url.UrlBuilder;
 import org.thechiselgroup.biomixer.client.core.util.url.UrlBuilderFactory;
 import org.thechiselgroup.biomixer.client.core.util.url.UrlFetchService;
 import org.thechiselgroup.biomixer.client.services.AbstractXMLWebResourceService;
@@ -43,9 +42,8 @@ public class OntologyStatusServiceAsyncClientImplementation extends
     }
 
     private String buildUrl() {
-        UrlBuilder urlBuilder = urlBuilderFactory.createUrlBuilder().path(
-                "/obs/ontologies");
-        return urlBuilder.toString();
+        return urlBuilderFactory.createUrlBuilder().path("/obs/ontologies")
+                .toString();
     }
 
     @Override

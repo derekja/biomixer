@@ -17,7 +17,6 @@ package org.thechiselgroup.biomixer.client.services.rootpath;
 
 import org.thechiselgroup.biomixer.client.core.resources.Resource;
 import org.thechiselgroup.biomixer.client.core.util.transform.Transformer;
-import org.thechiselgroup.biomixer.client.core.util.url.UrlBuilder;
 import org.thechiselgroup.biomixer.client.core.util.url.UrlBuilderFactory;
 import org.thechiselgroup.biomixer.client.core.util.url.UrlFetchService;
 import org.thechiselgroup.biomixer.client.services.AbstractXMLWebResourceService;
@@ -40,10 +39,9 @@ public class TermParentServiceAsyncClientImplementation extends
     }
 
     private String buildUrl(String virtualOntologyId, String fullConceptId) {
-        UrlBuilder urlBuilder = urlBuilderFactory.createUrlBuilder()
+        return urlBuilderFactory.createUrlBuilder()
                 .path("/bioportal/virtual/ontology/" + virtualOntologyId)
-                .parameter("conceptid", fullConceptId);
-        return urlBuilder.toString();
+                .uriParameter("conceptid", fullConceptId).toString();
     }
 
     @Override

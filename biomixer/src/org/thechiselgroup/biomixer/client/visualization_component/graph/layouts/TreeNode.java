@@ -41,11 +41,6 @@ public class TreeNode {
         return children;
     }
 
-    public int getDepth(TreeNode treeNode) {
-        // TODO Auto-generated method stub
-        return 0;
-    }
-
     public Set<TreeNode> getDescendants() {
         Set<TreeNode> descendants = new HashSet<TreeNode>();
         for (TreeNode childNode : children) {
@@ -66,11 +61,24 @@ public class TreeNode {
         return maxHeight + 1;
     }
 
+    /**
+     * 
+     * @param treeNode
+     *            The node being searched for
+     * @return The maximum depth down the tree which the specified treeNode
+     *         appears from the current node. For example, if there is a branch
+     *         below the current node so that there are multiple paths to the
+     *         specified treeNode, this method will return the length of the
+     *         longest path.
+     */
     public int getMaxDistance(TreeNode treeNode) {
         if (treeNode.equals(this)) {
             // for case of root
             return 0;
         }
+
+        assert this.getDescendants().contains(treeNode);
+
         int maxDistance = -1;
         if (children.contains(treeNode)) {
             maxDistance = 1;
