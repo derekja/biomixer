@@ -29,7 +29,6 @@ import org.thechiselgroup.biomixer.client.dnd.windows.ViewWindowContent;
 import org.thechiselgroup.biomixer.client.dnd.windows.WindowContentProducer;
 import org.thechiselgroup.biomixer.client.services.ontology_status.OntologyStatusServiceAsync;
 import org.thechiselgroup.biomixer.client.services.rootpath.HierarchyPathServiceAsync;
-import org.thechiselgroup.biomixer.client.services.rootpath.TermParentServiceAsync;
 import org.thechiselgroup.biomixer.client.services.term.ConceptNeighbourhoodServiceAsync;
 import org.thechiselgroup.biomixer.client.services.term.TermServiceAsync;
 import org.thechiselgroup.biomixer.client.visualization_component.graph.Graph;
@@ -52,9 +51,6 @@ public class HierarchyPathLoader implements EmbeddedViewLoader {
 
     @Inject
     private TermServiceAsync termService;
-
-    @Inject
-    private TermParentServiceAsync termParentService;
 
     @Inject
     private ConceptNeighbourhoodServiceAsync conceptNeighbourhoodService;
@@ -219,51 +215,83 @@ public class HierarchyPathLoader implements EmbeddedViewLoader {
             final String fullConceptId, final Resource previous,
             final DefaultView view) {
 
-        termParentService.getNextResource(virtualOntologyId, fullConceptId,
+        final String conceptUri = Concept.toConceptURI(virtualOntologyId,
+                fullConceptId);
+        if (view.getResourceModel().getResources().getByUri(conceptUri) != null) {
+            return;
+        }
+
+        termService.getBasicInformation(virtualOntologyId, fullConceptId,
                 new ErrorHandlingAsyncCallback<Resource>(errorHandler) {
 
                     @Override
                     public void onFailure(Throwable caught) {
                         errorHandler.handleError(new Exception(
-                                "Could not retrieve term information for "
+                                "Could not retrieve basic information for "
                                         + fullConceptId, caught));
                     }
 
                     @Override
-                    public void runOnSuccess(Resource resource)
+                    protected void runOnSuccess(final Resource resource)
                             throws Exception {
 
-                        if (previous != null) {
-                            resource.addChild(previous.getUri());
-                        }
+                        conceptNeighbourhoodService
+                                .getNeighbourhood(
+                                        virtualOntologyId,
+                                        fullConceptId,
+                                        new ErrorHandlingAsyncCallback<ResourceNeighbourhood>(
+                                                errorHandler) {
 
-                        // TODO inject resource model & use directly
-                        // if resource has already been found, merge them
-                        Resource resourceWithSameUri = view.getResourceModel()
-                                .getResources().getByUri(resource.getUri());
-                        if (resourceWithSameUri != null) {
-                            resourceWithSameUri.addChildren(resource
-                                    .getUriListValue(Concept.CHILD_CONCEPTS));
-                        } else {
-                            // TODO use automatic resource set
-                            ResourceSet resourceSet = new DefaultResourceSet();
-                            resourceSet.add(resource);
-                            view.getResourceModel().addResourceSet(resourceSet);
-                        }
+                                            @Override
+                                            public void onFailure(
+                                                    Throwable caught) {
+                                                errorHandler
+                                                        .handleError(new Exception(
+                                                                "Could not retrieve term information for "
+                                                                        + fullConceptId,
+                                                                caught));
+                                            }
 
-                        layout(view);
+                                            @Override
+                                            public void runOnSuccess(
+                                                    ResourceNeighbourhood result)
+                                                    throws Exception {
 
-                        // XXX is there a problem here with resources that have
-                        // been merged, following their parents multiple times?
-                        for (String parentUri : resource
-                                .getUriListValue(Concept.PARENT_CONCEPTS)) {
-                            String parentFullConceptId = Concept
-                                    .getConceptId(parentUri);
-                            loadTerm(virtualOntologyId, parentFullConceptId,
-                                    resource, view);
-                        }
+                                                if (view.getResourceModel()
+                                                        .getResources()
+                                                        .getByUri(conceptUri) != null) {
+                                                    return;
+                                                }
+
+                                                assert resource != null;
+
+                                                resource.applyPartialProperties(result
+                                                        .getPartialProperties());
+
+                                                ResourceSet resourceSet = new DefaultResourceSet();
+                                                resourceSet.add(resource);
+                                                view.getResourceModel()
+                                                        .addResourceSet(
+                                                                resourceSet);
+                                                layout(view);
+
+                                                for (String parentUri : resource
+                                                        .getUriListValue(Concept.PARENT_CONCEPTS)) {
+
+                                                    String parentFullConceptId = Concept
+                                                            .getConceptId(parentUri);
+                                                    loadTerm(
+                                                            virtualOntologyId,
+                                                            parentFullConceptId,
+                                                            resource, view);
+                                                }
+
+                                            }
+
+                                        });
 
                     }
+
                 });
 
     }

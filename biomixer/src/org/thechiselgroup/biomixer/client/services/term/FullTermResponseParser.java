@@ -33,6 +33,8 @@ import com.google.inject.Inject;
 
 public class FullTermResponseParser extends AbstractXMLResultParser {
 
+    private static final String OWL_THING = "owl:Thing";
+
     @Inject
     public FullTermResponseParser(DocumentProcessor documentProcessor) {
         super(documentProcessor);
@@ -71,6 +73,11 @@ public class FullTermResponseParser extends AbstractXMLResultParser {
                 if (!("SubClass".equals(name) || "SuperClass".equals(name))) {
                     // XXX OBO relations (such as 'negatively_regulates',
                     // '[R]is_a') get ignored
+                    continue;
+                }
+
+                if (getText(r, "id/text()").equals(OWL_THING)) {
+                    // don't include owl:Thing as a neighbour
                     continue;
                 }
 
