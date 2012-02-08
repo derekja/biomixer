@@ -107,65 +107,7 @@ public class HierarchyPathLoader implements EmbeddedViewLoader {
             final String virtualOntologyId, final String conceptId) {
 
         hierarchyPathService.findHierarchyToRoot(virtualOntologyId, conceptId,
-                new ErrorHandlingAsyncCallback<List<Resource>>(errorHandler) {
-
-                    private void addResourcesToView(final DefaultView view,
-                            final ResourceSet resourceSet,
-                            final int numberOfResourcesRetrieved) {
-
-                        if (resourceSet.size() < numberOfResourcesRetrieved) {
-                            /*
-                             * Waiting for additional term information to be
-                             * retrieved for resources on path hierarchy
-                             */
-                            new Timer() {
-                                @Override
-                                public void run() {
-                                    addResourcesToView(view, resourceSet,
-                                            numberOfResourcesRetrieved);
-                                }
-                            }.schedule(50);
-                        } else {
-                            for (final Resource resource : resourceSet) {
-                                final String currentConceptFullId = (String) resource
-                                        .getValue(Concept.FULL_ID);
-                                // TODO why do we need to get the concept
-                                // neighbourhood?
-                                conceptNeighbourhoodService
-                                        .getNeighbourhood(
-                                                virtualOntologyId,
-                                                currentConceptFullId,
-                                                new ErrorHandlingAsyncCallback<ResourceNeighbourhood>(
-                                                        errorHandler) {
-
-                                                    @Override
-                                                    public void onFailure(
-                                                            Throwable caught) {
-                                                        errorHandler
-                                                                .handleError(new Exception(
-                                                                        "Could not expand neighbourhood for "
-                                                                                + currentConceptFullId,
-                                                                        caught));
-                                                    }
-
-                                                    @Override
-                                                    protected void runOnSuccess(
-                                                            ResourceNeighbourhood result)
-                                                            throws Exception {
-                                                        resource.applyPartialProperties(result
-                                                                .getPartialProperties());
-                                                        view.getResourceModel()
-                                                                .addResourceSet(
-                                                                        resourceSet);
-                                                        layout(view);
-                                                    }
-
-                                                });
-
-                            }
-
-                        }
-                    }
+                new ErrorHandlingAsyncCallback<List<String>>(errorHandler) {
 
                     @Override
                     public void onFailure(Throwable caught) {
@@ -175,63 +117,65 @@ public class HierarchyPathLoader implements EmbeddedViewLoader {
                     }
 
                     @Override
-                    protected void runOnSuccess(
-                            List<Resource> hierarchyResources) throws Exception {
-
-                        // TODO use inject resource set factory
-                        ResourceSet resourceSet = new DefaultResourceSet();
-                        for (Resource resource : hierarchyResources) {
-                            getBasicInformationForResourceAndAddToResourceSet(
-                                    resource, virtualOntologyId, resourceSet);
-                        }
-                        // TODO a better alternative might be to pass
-                        // the hierarchyResources.size into
-                        // getBasicInformation...
-                        // and check at the end of the method if all information
-                        // has been retrieved (and to do the next thing if so).
-                        // This would eliminate the
-                        // wait with the timer. Also, the neighbourhood
-                        // for a resource can immediately be retrieved after
-                        // the basic info has been loaded (and is loading
-                        // the basic info necessary? the info might be part of
-                        // the response
-                        // for the neighbourhood).
-                        addResourcesToView(view, resourceSet,
-                                hierarchyResources.size());
-                    }
-                });
-    }
-
-    private void getBasicInformationForResourceAndAddToResourceSet(
-            final Resource resource, final String virtualOntologyId,
-            final ResourceSet resourceSet) {
-
-        final String conceptId = (String) resource.getValue(Concept.SHORT_ID);
-        termService.getBasicInformation(virtualOntologyId, conceptId,
-                new ErrorHandlingAsyncCallback<Resource>(errorHandler) {
-
-                    @Override
-                    public void onFailure(Throwable caught) {
-                        errorHandler.handleError(new Exception(
-                                "Could not retrieve basic information for "
-                                        + conceptId, caught));
-                    }
-
-                    @Override
-                    protected void runOnSuccess(Resource result)
+                    protected void runOnSuccess(List<String> shortIdsInHierarchy)
                             throws Exception {
 
-                        String fullId = (String) result
-                                .getValue(Concept.FULL_ID);
-                        String label = (String) result.getValue(Concept.LABEL);
-                        String type = (String) result.getValue(Concept.TYPE);
+                        // TODO use inject resource set factory
+                        for (String shortId : shortIdsInHierarchy) {
+                            termService.getBasicInformation(virtualOntologyId,
+                                    shortId,
+                                    new ErrorHandlingAsyncCallback<Resource>(
+                                            errorHandler) {
+                                        @Override
+                                        public void onFailure(Throwable caught) {
+                                            errorHandler
+                                                    .handleError(new Exception(
+                                                            "Could not retrieve basic information for "
+                                                                    + conceptId,
+                                                            caught));
+                                        }
 
-                        resource.putValue(Concept.FULL_ID, fullId);
-                        resource.putValue(Concept.LABEL, label);
-                        resource.putValue(Concept.TYPE, type);
+                                        @Override
+                                        protected void runOnSuccess(
+                                                final Resource resource)
+                                                throws Exception {
+                                            final String fullConceptId = (String) resource
+                                                    .getValue(Concept.FULL_ID);
+                                            conceptNeighbourhoodService
+                                                    .getNeighbourhood(
+                                                            virtualOntologyId,
+                                                            fullConceptId,
+                                                            new ErrorHandlingAsyncCallback<ResourceNeighbourhood>(
+                                                                    errorHandler) {
+                                                                @Override
+                                                                public void onFailure(
+                                                                        Throwable caught) {
+                                                                    errorHandler
+                                                                            .handleError(new Exception(
+                                                                                    "Could not expand neighbourhood for "
+                                                                                            + fullConceptId,
+                                                                                    caught));
+                                                                }
 
-                        resource.regenerateUri();
-                        resourceSet.add(resource);
+                                                                @Override
+                                                                protected void runOnSuccess(
+                                                                        ResourceNeighbourhood neighbourhood)
+                                                                        throws Exception {
+                                                                    resource.applyPartialProperties(neighbourhood
+                                                                            .getPartialProperties());
+                                                                    ResourceSet resourceSet = new DefaultResourceSet();
+                                                                    resourceSet
+                                                                            .add(resource);
+                                                                    view.getResourceModel()
+                                                                            .addResourceSet(
+                                                                                    resourceSet);
+                                                                    layout(view);
+                                                                }
+                                                            });
+                                        }
+                                    });
+
+                        }
                     }
                 });
     }
@@ -275,7 +219,6 @@ public class HierarchyPathLoader implements EmbeddedViewLoader {
             final String fullConceptId, final Resource previous,
             final DefaultView view) {
 
-        System.out.println("Starting recursive term service");
         termParentService.getNextResource(virtualOntologyId, fullConceptId,
                 new ErrorHandlingAsyncCallback<Resource>(errorHandler) {
 
@@ -344,7 +287,6 @@ public class HierarchyPathLoader implements EmbeddedViewLoader {
                     protected void runOnSuccess(Resource result)
                             throws Exception {
 
-                        System.out.println("Got short id");
                         String shortId = (String) result
                                 .getValue(Concept.SHORT_ID);
                         loadHierarchyData(graphView, virtualOntologyId, shortId);

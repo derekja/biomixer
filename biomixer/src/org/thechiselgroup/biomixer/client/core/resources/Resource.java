@@ -51,6 +51,28 @@ public class Resource implements Serializable {
         this.uri = uri;
     }
 
+    public void addChild(String uri) {
+        UriList newChild = new UriList(uri);
+        addChildren(newChild);
+    }
+
+    public void addChildren(UriList additionalChildren) {
+        UriList currentChildren = getUriListValue(Concept.CHILD_CONCEPTS);
+        currentChildren.addAllNew(additionalChildren);
+        putValue(Concept.CHILD_CONCEPTS, currentChildren);
+    }
+
+    public void addParent(String uri) {
+        UriList newParent = new UriList(uri);
+        addParents(newParent);
+    }
+
+    public void addParents(UriList additionalParents) {
+        UriList currentParents = getUriListValue(Concept.PARENT_CONCEPTS);
+        currentParents.addAllNew(additionalParents);
+        putValue(Concept.PARENT_CONCEPTS, currentParents);
+    }
+
     public void applyPartialProperties(
             Map<String, Serializable> partialProperties) {
         for (Entry<String, Serializable> entry : partialProperties.entrySet()) {
@@ -126,40 +148,9 @@ public class Resource implements Serializable {
         putValue(key, uriList);
     }
 
-    // XXX this is needed because the hierarchy service which only returns short
-    // ids. After the full id has been separately looked up, need it to be used
-    // in the URI to be consistent with other services.
-    public void regenerateUri() {
-        this.uri = Concept.toConceptURI(
-                (String) getValue(Concept.VIRTUAL_ONTOLOGY_ID),
-                (String) getValue(Concept.FULL_ID));
-    }
-
     @Override
     public String toString() {
         return "Resource [uri=" + uri + ";properties=" + properties + "]";
-    }
-
-    public void addChild(String uri) {
-        UriList newChild = new UriList(uri);
-        addChildren(newChild);
-    }
-
-    public void addChildren(UriList additionalChildren) {
-        UriList currentChildren = getUriListValue(Concept.CHILD_CONCEPTS);
-        currentChildren.addAllNew(additionalChildren);
-        putValue(Concept.CHILD_CONCEPTS, currentChildren);
-    }
-
-    public void addParent(String uri) {
-        UriList newParent = new UriList(uri);
-        addParents(newParent);
-    }
-
-    public void addParents(UriList additionalParents) {
-        UriList currentParents = getUriListValue(Concept.PARENT_CONCEPTS);
-        currentParents.addAllNew(additionalParents);
-        putValue(Concept.PARENT_CONCEPTS, currentParents);
     }
 
 }

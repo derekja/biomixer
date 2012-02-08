@@ -17,7 +17,6 @@ package org.thechiselgroup.biomixer.client.services.rootpath;
 
 import java.util.List;
 
-import org.thechiselgroup.biomixer.client.core.resources.Resource;
 import org.thechiselgroup.biomixer.client.core.util.transform.Transformer;
 import org.thechiselgroup.biomixer.client.core.util.url.UrlBuilderFactory;
 import org.thechiselgroup.biomixer.client.core.util.url.UrlFetchService;
@@ -49,12 +48,12 @@ public class HierarchyPathServiceAsyncClientImplementation extends
 
     @Override
     public void findHierarchyToRoot(final String virtualOntologyId,
-            final String conceptId, AsyncCallback<List<Resource>> callback) {
+            final String conceptId, AsyncCallback<List<String>> callback) {
 
         String url = buildUrl(conceptId, virtualOntologyId);
-        fetchUrl(callback, url, new Transformer<String, List<Resource>>() {
+        fetchUrl(callback, url, new Transformer<String, List<String>>() {
             @Override
-            public List<Resource> transform(String xmlText) throws Exception {
+            public List<String> transform(String xmlText) throws Exception {
                 return parser.parse(conceptId, xmlText, virtualOntologyId);
             }
 

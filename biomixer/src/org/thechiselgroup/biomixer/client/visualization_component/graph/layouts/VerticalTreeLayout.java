@@ -35,7 +35,6 @@ public class VerticalTreeLayout implements GraphLayout {
                 Arrays.asList(nodes), Arrays.asList(arcs));
         assert treesOnGraph.size() >= 1;
 
-        // System.out.println(treesOnGraph.size());
         SizeInt displayArea = callback.getDisplayArea();
 
         // XXX if there is more than one tree this will give them each the same

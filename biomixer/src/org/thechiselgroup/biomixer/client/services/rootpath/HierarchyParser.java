@@ -1,10 +1,23 @@
+/*******************************************************************************
+ * Copyright 2012 David Rusk 
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License"); 
+ * you may not use this file except in compliance with the License. 
+ * You may obtain a copy of the License at 
+ *
+ *    http://www.apache.org/licenses/LICENSE-2.0 
+ *     
+ * Unless required by applicable law or agreed to in writing, software 
+ * distributed under the License is distributed on an "AS IS" BASIS, 
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. 
+ * See the License for the specific language governing permissions and 
+ * limitations under the License.  
+ *******************************************************************************/
 package org.thechiselgroup.biomixer.client.services.rootpath;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import org.thechiselgroup.biomixer.client.Concept;
-import org.thechiselgroup.biomixer.client.core.resources.Resource;
 import org.thechiselgroup.biomixer.client.services.AbstractXMLResultParser;
 import org.thechiselgroup.biomixer.shared.workbench.util.xml.DocumentProcessor;
 
@@ -19,26 +32,11 @@ public class HierarchyParser extends AbstractXMLResultParser {
         super(documentProcessor);
     }
 
-    public Resource getResourceFromAlreadyFound(String conceptShortId,
-            List<Resource> alreadyFound) {
-        for (Resource resource : alreadyFound) {
-            if (((String) resource.getValue(Concept.SHORT_ID))
-                    .equals(conceptShortId)) {
-                return resource;
-            }
-        }
-        return null;
-    }
-
-    public List<Resource> parse(String targetShortConceptId, String xmlText,
+    public List<String> parse(String targetShortConceptId, String xmlText,
             String virtualOntologyId) throws Exception {
-        List<Resource> resourcesOnPaths = new ArrayList<Resource>();
 
-        Resource targetResource = new Resource(Concept.toConceptURI(
-                virtualOntologyId, targetShortConceptId));
-        targetResource.putValue(Concept.SHORT_ID, targetShortConceptId);
-        targetResource.putValue(Concept.VIRTUAL_ONTOLOGY_ID, virtualOntologyId);
-        resourcesOnPaths.add(targetResource);
+        List<String> shortIdsOnPaths = new ArrayList<String>();
+        shortIdsOnPaths.add(targetShortConceptId);
 
         Object rootNode = parseDocument(xmlText);
         Object[] paths = getNodes(rootNode, "//success/data/list/classBean");
@@ -53,36 +51,14 @@ public class HierarchyParser extends AbstractXMLResultParser {
                 continue;
             }
 
-            Resource previousResource = null;
             for (String shortId : shortIds) {
-                Resource alreadyFound = getResourceFromAlreadyFound(shortId,
-                        resourcesOnPaths);
-
-                Resource concept;
-                if (alreadyFound == null) {
-                    concept = new Resource(Concept.toConceptURI(
-                            virtualOntologyId, shortId));
-                    concept.putValue(Concept.SHORT_ID, shortId);
-                    concept.putValue(Concept.VIRTUAL_ONTOLOGY_ID,
-                            virtualOntologyId);
-                    resourcesOnPaths.add(concept);
-                } else {
-                    concept = alreadyFound;
+                if (!shortIdsOnPaths.contains(shortId)) {
+                    shortIdsOnPaths.add(shortId);
                 }
-
-                if (previousResource != null) {
-                    concept.addParent(previousResource.getUri());
-                    previousResource.addChild(concept.getUri());
-                }
-
-                previousResource = concept;
             }
 
-            // link last resource with the target
-            previousResource.addChild(targetResource.getUri());
-            targetResource.addParent(previousResource.getUri());
         }
 
-        return resourcesOnPaths;
+        return shortIdsOnPaths;
     }
 }

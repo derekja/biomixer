@@ -33,8 +33,6 @@ import com.google.inject.Inject;
 
 public class FullTermResponseParser extends AbstractXMLResultParser {
 
-    private static final String REVERSE_PREFIX = "[R]";
-
     @Inject
     public FullTermResponseParser(DocumentProcessor documentProcessor) {
         super(documentProcessor);
@@ -52,10 +50,6 @@ public class FullTermResponseParser extends AbstractXMLResultParser {
         Object[] nodes = getNodes(rootNode,
                 "//success/data/classBean/relations/entry");
 
-        List<Object> processLater = new ArrayList<Object>();
-        List<Object> reversedNodes = new ArrayList<Object>();
-        List<String> subclassOrSuperclassConceptIds = new ArrayList<String>();
-
         UriList parentConcepts = new UriList();
         UriList childConcepts = new UriList();
         List<Resource> resources = new ArrayList<Resource>();
@@ -70,22 +64,13 @@ public class FullTermResponseParser extends AbstractXMLResultParser {
                 continue;
             }
 
-            // (2) name, check for inverted
             String name = getText(node, "string/text()");
-            boolean reversed = name.startsWith(REVERSE_PREFIX);
-            if (reversed) {
-                name = name.substring(REVERSE_PREFIX.length());
-            }
-
             for (int j = 0; j < relationships.length; j++) {
                 Object r = relationships[j];
 
-                if (reversed) {
-                    reversedNodes.add(r);
-                }
-
                 if (!("SubClass".equals(name) || "SuperClass".equals(name))) {
-                    processLater.add(r);
+                    // XXX OBO relations (such as 'negatively_regulates',
+                    // '[R]is_a') get ignored
                     continue;
                 }
 
@@ -93,20 +78,8 @@ public class FullTermResponseParser extends AbstractXMLResultParser {
                         ontologyId, parentConcepts, childConcepts);
 
                 resources.add(neighbour);
-
-                subclassOrSuperclassConceptIds
-                        .add(Concept.getFullId(neighbour));
             }
 
-        }
-
-        for (Object n : processLater) {
-            if (subclassOrSuperclassConceptIds.contains(getConceptId(n))) {
-                continue;
-            }
-
-            process(n, reversedNodes.contains(n), ontologyId, parentConcepts,
-                    childConcepts);
         }
 
         Map<String, Serializable> partialProperties = CollectionFactory
