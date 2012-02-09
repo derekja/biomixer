@@ -13,14 +13,23 @@
  * See the License for the specific language governing permissions and 
  * limitations under the License.  
  *******************************************************************************/
-package org.thechiselgroup.biomixer.client.services.ontology_status;
+package org.thechiselgroup.biomixer.client.services.ontology;
 
-import java.util.List;
+import org.thechiselgroup.biomixer.client.services.AbstractXMLResultParser;
+import org.thechiselgroup.biomixer.shared.workbench.util.xml.DocumentProcessor;
 
-import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.google.inject.Inject;
 
-public interface OntologyStatusServiceAsync {
+public class OntologyNameParser extends AbstractXMLResultParser {
 
-    void getAvailableOntologies(AsyncCallback<List<String>> callback);
+    @Inject
+    public OntologyNameParser(DocumentProcessor documentProcessor) {
+        super(documentProcessor);
+    }
+
+    public String parse(String xmlText) throws Exception {
+        return getText(parseDocument(xmlText),
+                "//success/data/ontologyBean/displayLabel/text()");
+    }
 
 }

@@ -9,7 +9,7 @@ import org.thechiselgroup.biomixer.client.core.visualization.DefaultView;
 import org.thechiselgroup.biomixer.client.core.visualization.View;
 import org.thechiselgroup.biomixer.client.dnd.windows.ViewWindowContent;
 import org.thechiselgroup.biomixer.client.dnd.windows.WindowContentProducer;
-import org.thechiselgroup.biomixer.client.services.ontology_version.OntologyVersionServiceAsync;
+import org.thechiselgroup.biomixer.client.services.ontology.OntologyVersionServiceAsync;
 import org.thechiselgroup.biomixer.client.services.rootpath.RootPathServiceAsync;
 import org.thechiselgroup.biomixer.client.visualization_component.graph.Graph;
 import org.thechiselgroup.biomixer.client.visualization_component.graph.GraphLayoutSupport;

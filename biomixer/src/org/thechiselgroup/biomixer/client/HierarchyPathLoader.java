@@ -26,7 +26,7 @@ import org.thechiselgroup.biomixer.client.core.visualization.DefaultView;
 import org.thechiselgroup.biomixer.client.core.visualization.View;
 import org.thechiselgroup.biomixer.client.dnd.windows.ViewWindowContent;
 import org.thechiselgroup.biomixer.client.dnd.windows.WindowContentProducer;
-import org.thechiselgroup.biomixer.client.services.ontology_status.OntologyStatusServiceAsync;
+import org.thechiselgroup.biomixer.client.services.ontology.OntologyStatusServiceAsync;
 import org.thechiselgroup.biomixer.client.services.rootpath.HierarchyPathServiceAsync;
 import org.thechiselgroup.biomixer.client.services.term.ConceptNeighbourhoodServiceAsync;
 import org.thechiselgroup.biomixer.client.services.term.TermServiceAsync;

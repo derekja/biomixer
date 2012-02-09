@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and 
  * limitations under the License.  
  *******************************************************************************/
-package org.thechiselgroup.biomixer.client.services.ontology_status;
+package org.thechiselgroup.biomixer.client.services.ontology;
 
 import static org.junit.Assert.assertTrue;
 
@@ -22,6 +22,7 @@ import java.util.Map;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.thechiselgroup.biomixer.client.services.ontology.OntologyStatusParser;
 import org.thechiselgroup.biomixer.server.core.util.IOUtils;
 import org.thechiselgroup.biomixer.server.workbench.util.xml.StandardJavaXMLDocumentProcessor;
 
