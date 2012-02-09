@@ -66,7 +66,7 @@ public class ConceptNeighbourhoodServiceAsyncClientImplementation extends
                     @Override
                     public ResourceNeighbourhood transform(String xmlText)
                             throws Exception {
-                        return responseParser.parse(ontologyId, xmlText);
+                        return responseParser.parseNeighbourhood(ontologyId, xmlText);
                     }
                 });
     }

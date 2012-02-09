@@ -44,8 +44,8 @@ public class FullTermResponseParser extends AbstractXMLResultParser {
         return getText(r, "fullId/text()");
     }
 
-    public ResourceNeighbourhood parse(String ontologyId, String xmlText)
-            throws Exception {
+    public ResourceNeighbourhood parseNeighbourhood(String ontologyId,
+            String xmlText) throws Exception {
 
         Object rootNode = parseDocument(xmlText);
 
@@ -95,6 +95,34 @@ public class FullTermResponseParser extends AbstractXMLResultParser {
         partialProperties.put(Concept.CHILD_CONCEPTS, childConcepts);
 
         return new ResourceNeighbourhood(partialProperties, resources);
+    }
+
+    public Resource parseResource(String ontologyId, String xmlText)
+            throws Exception {
+
+        Object rootNode = parseDocument(xmlText);
+
+        Object[] nodes = getNodes(rootNode, "//success/data/classBean");
+        assert nodes.length == 1;
+
+        Object node = nodes[0];
+
+        String fullConceptId = getConceptId(node);
+        String shortConceptId = getText(node, "id/text()");
+        String label = getText(node, "label/text()");
+
+        Resource resource = new Resource(Concept.toConceptURI(ontologyId,
+                fullConceptId));
+        resource.putValue(Concept.FULL_ID, fullConceptId);
+        resource.putValue(Concept.SHORT_ID, shortConceptId);
+        resource.putValue(Concept.LABEL, label);
+        resource.putValue(Concept.VIRTUAL_ONTOLOGY_ID, ontologyId);
+
+        ResourceNeighbourhood neighbourhood = parseNeighbourhood(ontologyId,
+                xmlText);
+        resource.applyPartialProperties(neighbourhood.getPartialProperties());
+
+        return resource;
     }
 
     private Resource process(Object node, boolean reversed, String ontologyId,
