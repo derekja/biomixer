@@ -686,9 +686,6 @@ public class Graph extends AbstractViewContentDisplay implements
     @Override
     public void runLayout(GraphLayout layout) {
         assert layout != null;
-        // XXX don't know if nodes really need to be updated
-        updateNodesForVisualItems(getVisualItems());
-        updateArcsForVisuaItems(getVisualItems());
         layout.run(getNodeItems(), getArcItems(), this);
     }
 
@@ -801,14 +798,6 @@ public class Graph extends AbstractViewContentDisplay implements
 
     private void updateNode(VisualItem visualItem) {
         visualItem.<NodeItem> getDisplayObject().updateNode();
-    }
-
-    public void updateNodesForVisualItems(
-            LightweightCollection<VisualItem> visualItems) {
-        assert visualItems != null;
-        for (VisualItem visualItem : visualItems) {
-            updateNode(visualItem);
-        }
     }
 
 }
