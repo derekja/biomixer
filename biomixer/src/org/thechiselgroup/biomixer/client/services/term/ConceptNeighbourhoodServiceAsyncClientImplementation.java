@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright 2009, 2010 Lars Grammel 
+ * Copyright 2009, 2010, 2012 Lars Grammel, David Rusk 
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); 
  * you may not use this file except in compliance with the License. 
@@ -15,6 +15,7 @@
  *******************************************************************************/
 package org.thechiselgroup.biomixer.client.services.term;
 
+import org.thechiselgroup.biomixer.client.core.resources.Resource;
 import org.thechiselgroup.biomixer.client.core.util.transform.Transformer;
 import org.thechiselgroup.biomixer.client.core.util.url.UrlBuilderFactory;
 import org.thechiselgroup.biomixer.client.core.util.url.UrlFetchService;
@@ -46,10 +47,10 @@ public class ConceptNeighbourhoodServiceAsyncClientImplementation extends
         this.responseParser = responseParser;
     }
 
-    private String buildUrl(String conceptId, String ontologyId) {
+    private String buildUrl(String fullConceptId, String ontologyId) {
         return urlBuilderFactory.createUrlBuilder()
                 .path("bioportal/virtual/ontology/" + ontologyId)
-                .uriParameter("conceptid", conceptId).toString();
+                .uriParameter("conceptid", fullConceptId).toString();
     }
 
     @Override
@@ -66,9 +67,28 @@ public class ConceptNeighbourhoodServiceAsyncClientImplementation extends
                     @Override
                     public ResourceNeighbourhood transform(String xmlText)
                             throws Exception {
-                        return responseParser.parseNeighbourhood(ontologyId, xmlText);
+                        return responseParser.parseNeighbourhood(ontologyId,
+                                xmlText);
                     }
                 });
+    }
+
+    @Override
+    public void getResourceWithRelations(final String ontologyId,
+            String conceptId, AsyncCallback<Resource> callback) {
+
+        assert ontologyId != null;
+        assert conceptId != null;
+
+        String url = buildUrl(conceptId, ontologyId);
+
+        fetchUrl(callback, url, new Transformer<String, Resource>() {
+            @Override
+            public Resource transform(String xmlText) throws Exception {
+                return responseParser.parseResource(ontologyId, xmlText);
+            }
+        });
+
     }
 
 }
