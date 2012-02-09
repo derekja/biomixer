@@ -21,8 +21,6 @@ import static org.thechiselgroup.biomixer.shared.core.test.matchers.collections.
 
 import java.io.IOException;
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 
 import org.junit.Before;
@@ -38,14 +36,6 @@ public class FullTermResponseParserTest {
 
     private FullTermResponseParser underTest;
 
-    public List<String> asUris(String virtualOntologyId, String... conceptIds) {
-        List<String> uris = new ArrayList<String>();
-        for (String conceptId : conceptIds) {
-            uris.add(Concept.toConceptURI(virtualOntologyId, conceptId));
-        }
-        return uris;
-    }
-
     private Resource getResource(String ontologyId, String xmlFilename)
             throws Exception {
         return underTest.parseResource(ontologyId, getResponseXML(xmlFilename));
@@ -58,10 +48,9 @@ public class FullTermResponseParserTest {
     }
 
     private String getResponseXML(String xmlFilename) throws IOException {
-        String responseXml = IOUtils
+        return IOUtils
                 .readIntoString(FullTermResponseParserTest.class
                         .getResourceAsStream(xmlFilename));
-        return responseXml;
     }
 
     @Test
@@ -82,7 +71,7 @@ public class FullTermResponseParserTest {
 
         assertThat(
                 childUris,
-                containsExactly(asUris(virtualOntologyId,
+                containsExactly(Concept.asUris(virtualOntologyId,
                         "http://purl.org/obo/owl/GO#GO_0001300",
                         "http://purl.org/obo/owl/GO#GO_0090398",
                         "http://purl.org/obo/owl/GO#GO_0001302",
@@ -91,7 +80,7 @@ public class FullTermResponseParserTest {
 
         assertThat(
                 parentUris,
-                containsExactly(asUris(virtualOntologyId,
+                containsExactly(Concept.asUris(virtualOntologyId,
                         "http://purl.org/obo/owl/GO#GO_0007568",
                         "http://purl.org/obo/owl/GO#GO_0009987")));
     }

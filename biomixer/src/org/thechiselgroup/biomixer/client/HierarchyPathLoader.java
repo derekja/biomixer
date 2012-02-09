@@ -21,8 +21,6 @@ import java.util.Set;
 import org.thechiselgroup.biomixer.client.core.error_handling.ErrorHandler;
 import org.thechiselgroup.biomixer.client.core.error_handling.ErrorHandlingAsyncCallback;
 import org.thechiselgroup.biomixer.client.core.resources.Resource;
-import org.thechiselgroup.biomixer.client.core.resources.ResourceSet;
-import org.thechiselgroup.biomixer.client.core.resources.ResourceSetFactory;
 import org.thechiselgroup.biomixer.client.core.util.UriUtils;
 import org.thechiselgroup.biomixer.client.core.visualization.DefaultView;
 import org.thechiselgroup.biomixer.client.core.visualization.View;
@@ -45,9 +43,6 @@ import com.google.inject.Inject;
 public class HierarchyPathLoader implements EmbeddedViewLoader {
 
     public static final String EMBED_MODE = "hierarchy_to_root";
-
-    @Inject
-    private ResourceSetFactory resourceSetFactory;
 
     @Inject
     private HierarchyPathServiceAsync hierarchyPathService;
@@ -139,12 +134,9 @@ public class HierarchyPathLoader implements EmbeddedViewLoader {
                                                 @Override
                                                 protected void runOnSuccess(
                                                         Resource resource) {
-                                                    ResourceSet resourceSet = resourceSetFactory
-                                                            .createResourceSet();
-                                                    resourceSet.add(resource);
                                                     view.getResourceModel()
-                                                            .addResourceSet(
-                                                                    resourceSet);
+                                                            .getAutomaticResourceSet()
+                                                            .add(resource);
                                                     layout(view);
                                                 }
                                             });
@@ -209,10 +201,8 @@ public class HierarchyPathLoader implements EmbeddedViewLoader {
                             return;
                         }
 
-                        ResourceSet resourceSet = resourceSetFactory
-                                .createResourceSet();
-                        resourceSet.add(resource);
-                        view.getResourceModel().addResourceSet(resourceSet);
+                        view.getResourceModel().getAutomaticResourceSet()
+                                .add(resource);
                         layout(view);
 
                         for (String parentUri : resource
