@@ -32,6 +32,8 @@ import org.thechiselgroup.biomixer.client.graph.BioMixerArcTypeProvider;
 import org.thechiselgroup.biomixer.client.services.NcboRestUrlBuilderFactory;
 import org.thechiselgroup.biomixer.client.services.mapping.MappingServiceAsync;
 import org.thechiselgroup.biomixer.client.services.mapping.MappingServiceImplementation;
+import org.thechiselgroup.biomixer.client.services.ontology.OntologyNameServiceAsync;
+import org.thechiselgroup.biomixer.client.services.ontology.OntologyNameServiceAsyncClientImplementation;
 import org.thechiselgroup.biomixer.client.services.ontology.OntologyStatusServiceAsync;
 import org.thechiselgroup.biomixer.client.services.ontology.OntologyStatusServiceAsyncClientImplementation;
 import org.thechiselgroup.biomixer.client.services.ontology.OntologyVersionServiceAsync;
@@ -102,6 +104,10 @@ public class BioMixerClientModule extends ChooselWorkbenchClientModule {
 
         bind(TermParentServiceAsync.class).to(
                 TermParentServiceAsyncClientImplementation.class).in(
+                Singleton.class);
+
+        bind(OntologyNameServiceAsync.class).to(
+                OntologyNameServiceAsyncClientImplementation.class).in(
                 Singleton.class);
 
         bind(OntologyVersionServiceAsync.class).to(

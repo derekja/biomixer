@@ -15,11 +15,15 @@
  *******************************************************************************/
 package org.thechiselgroup.biomixer.client.services.term;
 
+import org.thechiselgroup.biomixer.client.Concept;
+import org.thechiselgroup.biomixer.client.core.error_handling.ErrorHandler;
+import org.thechiselgroup.biomixer.client.core.error_handling.ErrorHandlingAsyncCallback;
 import org.thechiselgroup.biomixer.client.core.resources.Resource;
 import org.thechiselgroup.biomixer.client.core.util.transform.Transformer;
 import org.thechiselgroup.biomixer.client.core.util.url.UrlBuilderFactory;
 import org.thechiselgroup.biomixer.client.core.util.url.UrlFetchService;
 import org.thechiselgroup.biomixer.client.services.AbstractXMLWebResourceService;
+import org.thechiselgroup.biomixer.client.services.ontology.OntologyNameServiceAsync;
 import org.thechiselgroup.biomixer.client.visualization_component.graph.ResourceNeighbourhood;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
@@ -36,15 +40,22 @@ public class ConceptNeighbourhoodServiceAsyncClientImplementation extends
 
     private final FullTermResponseParser responseParser;
 
+    private OntologyNameServiceAsync ontologyNameService;
+
+    private ErrorHandler errorHandler;
+
     @Inject
     public ConceptNeighbourhoodServiceAsyncClientImplementation(
             UrlFetchService urlFetchService,
             UrlBuilderFactory urlBuilderFactory,
-            FullTermResponseParser responseParser) {
+            OntologyNameServiceAsync ontologyNameService,
+            ErrorHandler errorHandler, FullTermResponseParser responseParser) {
 
         super(urlFetchService, urlBuilderFactory);
 
         this.responseParser = responseParser;
+        this.ontologyNameService = ontologyNameService;
+        this.errorHandler = errorHandler;
     }
 
     private String buildUrl(String fullConceptId, String ontologyId) {
@@ -60,35 +71,85 @@ public class ConceptNeighbourhoodServiceAsyncClientImplementation extends
         assert ontologyId != null;
         assert conceptId != null;
 
-        String url = buildUrl(conceptId, ontologyId);
+        final String url = buildUrl(conceptId, ontologyId);
 
-        fetchUrl(callback, url,
-                new Transformer<String, ResourceNeighbourhood>() {
+        ontologyNameService.getOntologyName(ontologyId,
+                new ErrorHandlingAsyncCallback<String>(errorHandler) {
+
                     @Override
-                    public ResourceNeighbourhood transform(String xmlText)
-                            throws Exception {
-                        return responseParser.parseNeighbourhood(ontologyId,
-                                xmlText);
+                    public void onFailure(Throwable caught) {
+                        errorHandler.handleError(new Exception(
+                                "Could not retrieve ontology name for virtual ontology id: "
+                                        + ontologyId, caught));
                     }
+
+                    @Override
+                    public void runOnSuccess(final String ontologyName) {
+                        fetchUrl(
+                                callback,
+                                url,
+                                new Transformer<String, ResourceNeighbourhood>() {
+                                    @Override
+                                    public ResourceNeighbourhood transform(
+                                            String xmlText) throws Exception {
+
+                                        ResourceNeighbourhood neighbourhood = responseParser
+                                                .parseNeighbourhood(ontologyId,
+                                                        xmlText);
+
+                                        for (Resource resource : neighbourhood
+                                                .getResources()) {
+                                            resource.putValue(
+                                                    Concept.CONCEPT_ONTOLOGY_NAME,
+                                                    ontologyName);
+                                        }
+
+                                        return neighbourhood;
+                                    }
+                                });
+                    }
+
                 });
     }
 
     @Override
     public void getResourceWithRelations(final String ontologyId,
-            String conceptId, AsyncCallback<Resource> callback) {
+            String conceptId, final AsyncCallback<Resource> callback) {
 
         assert ontologyId != null;
         assert conceptId != null;
 
-        String url = buildUrl(conceptId, ontologyId);
+        final String url = buildUrl(conceptId, ontologyId);
 
-        fetchUrl(callback, url, new Transformer<String, Resource>() {
-            @Override
-            public Resource transform(String xmlText) throws Exception {
-                return responseParser.parseResource(ontologyId, xmlText);
-            }
-        });
+        ontologyNameService.getOntologyName(ontologyId,
+                new ErrorHandlingAsyncCallback<String>(errorHandler) {
 
+                    @Override
+                    public void onFailure(Throwable caught) {
+                        errorHandler.handleError(new Exception(
+                                "Could not retrieve ontology name for virtual ontology id: "
+                                        + ontologyId, caught));
+                    }
+
+                    @Override
+                    public void runOnSuccess(final String ontologyName) {
+                        fetchUrl(callback, url,
+                                new Transformer<String, Resource>() {
+                                    @Override
+                                    public Resource transform(String xmlText)
+                                            throws Exception {
+                                        Resource resource = responseParser
+                                                .parseResource(ontologyId,
+                                                        xmlText);
+                                        resource.putValue(
+                                                Concept.CONCEPT_ONTOLOGY_NAME,
+                                                ontologyName);
+                                        return resource;
+                                    }
+                                });
+                    }
+
+                });
     }
 
 }
