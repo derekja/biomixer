@@ -63,7 +63,7 @@ public class TermServiceImplementationTest {
 
     private UrlBuilder urlBuilder;
 
-    @Ignore("TODO: fix this test case's problems with using the ontology name service")
+    @Ignore("TODO: introduction of the name service causes no argument to be captured")
     @SuppressWarnings({ "unchecked", "rawtypes" })
     @Test
     public void returnParsedConcept() throws Exception {
@@ -105,7 +105,7 @@ public class TermServiceImplementationTest {
         when(urlBuilder.toString()).thenReturn(URL);
     }
 
-    @Ignore("TODO: fix this test case's problems with using the ontology name service")
+    @Ignore("TODO: introduction of the name service causes verification of the url fetch to fail")
     @SuppressWarnings("unchecked")
     @Test
     public void urlFetched() {

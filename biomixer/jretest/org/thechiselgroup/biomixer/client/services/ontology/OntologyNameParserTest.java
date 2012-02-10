@@ -29,11 +29,9 @@ public class OntologyNameParserTest {
     private OntologyNameParser underTest;
 
     public String getOntologyName(String xmlFilename) throws Exception {
-        String responseXML = IOUtils
+        return underTest.parse(IOUtils
                 .readIntoString(OntologyVersionParserTest.class
-                        .getResourceAsStream(xmlFilename));
-
-        return underTest.parse(responseXML);
+                        .getResourceAsStream(xmlFilename)));
     }
 
     @Test

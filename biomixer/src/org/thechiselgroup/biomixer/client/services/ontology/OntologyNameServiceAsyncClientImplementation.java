@@ -33,6 +33,8 @@ public class OntologyNameServiceAsyncClientImplementation extends
             UrlFetchService urlFetchService,
             UrlBuilderFactory urlBuilderFactory, OntologyNameParser parser) {
         super(urlFetchService, urlBuilderFactory);
+
+        assert parser != null;
         this.parser = parser;
     }
 

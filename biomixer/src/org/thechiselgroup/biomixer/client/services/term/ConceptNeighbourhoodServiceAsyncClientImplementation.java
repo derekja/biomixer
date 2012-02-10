@@ -53,6 +53,10 @@ public class ConceptNeighbourhoodServiceAsyncClientImplementation extends
 
         super(urlFetchService, urlBuilderFactory);
 
+        assert responseParser != null;
+        assert ontologyNameService != null;
+        assert errorHandler != null;
+
         this.responseParser = responseParser;
         this.ontologyNameService = ontologyNameService;
         this.errorHandler = errorHandler;
