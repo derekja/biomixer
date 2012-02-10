@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and 
  * limitations under the License.  
  *******************************************************************************/
-package org.thechiselgroup.biomixer.client.services.rootpath;
+package org.thechiselgroup.biomixer.client.services.hierarchy;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.junit.Assert.assertThat;
@@ -24,6 +24,7 @@ import java.util.Set;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.thechiselgroup.biomixer.client.services.hierarchy.HierarchyParser;
 import org.thechiselgroup.biomixer.server.core.util.IOUtils;
 import org.thechiselgroup.biomixer.server.workbench.util.xml.StandardJavaXMLDocumentProcessor;
 

@@ -27,17 +27,7 @@ public class BioMixerEmbedInitializer extends EmbedInitializer {
     }
 
     @Inject
-    private void setHierarchyPathLoader(HierarchyPathLoader loader) {
-        registerLoader(loader);
-    }
-
-    @Inject
-    private void setRootPathLoader(RootPathLoader loader) {
-        registerLoader(loader);
-    }
-
-    @Inject
-    private void setTermRootPathLoader(TermRootPathLoader loader) {
+    private void setRootPathsLoader(RootPathsLoader loader) {
         registerLoader(loader);
     }
 

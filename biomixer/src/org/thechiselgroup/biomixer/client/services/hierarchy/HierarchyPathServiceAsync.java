@@ -13,15 +13,15 @@
  * See the License for the specific language governing permissions and 
  * limitations under the License.  
  *******************************************************************************/
-package org.thechiselgroup.biomixer.client.services.rootpath;
+package org.thechiselgroup.biomixer.client.services.hierarchy;
 
-import org.thechiselgroup.biomixer.client.core.resources.Resource;
+import java.util.Set;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
-public interface TermParentServiceAsync {
+public interface HierarchyPathServiceAsync {
 
-    void getNextResource(String virtualOntologyId, String fullConceptId,
-            AsyncCallback<Resource> callback);
+    void findHierarchyToRoot(String virtualOntologyId, String conceptId,
+            AsyncCallback<Set<String>> callback);
 
 }

@@ -26,8 +26,8 @@ import org.thechiselgroup.biomixer.client.core.visualization.DefaultView;
 import org.thechiselgroup.biomixer.client.core.visualization.View;
 import org.thechiselgroup.biomixer.client.dnd.windows.ViewWindowContent;
 import org.thechiselgroup.biomixer.client.dnd.windows.WindowContentProducer;
+import org.thechiselgroup.biomixer.client.services.hierarchy.HierarchyPathServiceAsync;
 import org.thechiselgroup.biomixer.client.services.ontology.OntologyStatusServiceAsync;
-import org.thechiselgroup.biomixer.client.services.rootpath.HierarchyPathServiceAsync;
 import org.thechiselgroup.biomixer.client.services.term.ConceptNeighbourhoodServiceAsync;
 import org.thechiselgroup.biomixer.client.services.term.TermServiceAsync;
 import org.thechiselgroup.biomixer.client.visualization_component.graph.Graph;
@@ -40,9 +40,9 @@ import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.inject.Inject;
 
-public class HierarchyPathLoader implements EmbeddedViewLoader {
+public class RootPathsLoader implements EmbeddedViewLoader {
 
-    public static final String EMBED_MODE = "hierarchy_to_root";
+    public static final String EMBED_MODE = "paths_to_root";
 
     @Inject
     private HierarchyPathServiceAsync hierarchyPathService;
