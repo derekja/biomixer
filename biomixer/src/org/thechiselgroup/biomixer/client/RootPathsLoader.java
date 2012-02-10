@@ -180,7 +180,8 @@ public class RootPathsLoader implements EmbeddedViewLoader {
 
         final String conceptUri = Concept.toConceptURI(virtualOntologyId,
                 fullConceptId);
-        if (view.getResourceModel().getResources().getByUri(conceptUri) != null) {
+        if (view.getResourceModel().getResources()
+                .containsResourceWithUri(conceptUri)) {
             return;
         }
 
@@ -197,7 +198,7 @@ public class RootPathsLoader implements EmbeddedViewLoader {
                     @Override
                     public void runOnSuccess(Resource resource) {
                         if (view.getResourceModel().getResources()
-                                .getByUri(conceptUri) != null) {
+                                .containsResourceWithUri(conceptUri)) {
                             return;
                         }
 
