@@ -65,7 +65,8 @@ public class ConceptNeighbourhoodServiceAsyncClientImplementation extends
     }
 
     @Override
-    public void getNeighbourhood(final String ontologyId, String conceptId,
+    public void getNeighbourhood(final String ontologyId,
+            final String conceptId,
             final AsyncCallback<ResourceNeighbourhood> callback) {
 
         assert ontologyId != null;
@@ -79,7 +80,8 @@ public class ConceptNeighbourhoodServiceAsyncClientImplementation extends
                     @Override
                     public void onFailure(Throwable caught) {
                         errorHandler.handleError(new Exception(
-                                "Could not retrieve ontology name for virtual ontology id: "
+                                "Could not retrieve concept neighbourhood for concept "
+                                        + conceptId + " in ontology "
                                         + ontologyId, caught));
                     }
 
@@ -114,7 +116,7 @@ public class ConceptNeighbourhoodServiceAsyncClientImplementation extends
 
     @Override
     public void getResourceWithRelations(final String ontologyId,
-            String conceptId, final AsyncCallback<Resource> callback) {
+            final String conceptId, final AsyncCallback<Resource> callback) {
 
         assert ontologyId != null;
         assert conceptId != null;
@@ -127,7 +129,8 @@ public class ConceptNeighbourhoodServiceAsyncClientImplementation extends
                     @Override
                     public void onFailure(Throwable caught) {
                         errorHandler.handleError(new Exception(
-                                "Could not retrieve ontology name for virtual ontology id: "
+                                "Could not retrieve concept neighbourhood for concept "
+                                        + conceptId + " in ontology "
                                         + ontologyId, caught));
                     }
 
